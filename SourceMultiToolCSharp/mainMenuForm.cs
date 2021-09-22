@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Deployment.Application;
 using System.Diagnostics;
@@ -49,6 +50,8 @@ namespace SourceMultiToolCSharp
 
         private void MainMenuForm_Load(object sender, EventArgs e)
         {
+            FindSteam();
+
             versionLabel.Text += version;
             // Add Source Games
             listOfSourceGames.Add(new SourceGame
@@ -228,6 +231,13 @@ namespace SourceMultiToolCSharp
             }
         }
 
+
+        private void FindSteam()
+        {
+            steam.MainSteamDir = (Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node\\Valve\\Steam\\") ?? Registry.LocalMachine.OpenSubKey("SOFTWARE\\Valve\\Steam\\"))?.GetValue("InstallPath").ToString();
+            textSteamDirectory.Text = steam.MainSteamDir;
+
+        }
         private void FindSteamDirectories()
         {
             if (File.Exists(steam.MainSteamDir + "/steamapps/libraryfolders.vdf"))
@@ -242,9 +252,13 @@ namespace SourceMultiToolCSharp
                     {
                         string temp = lines[i];
                         int finalPosition = temp.LastIndexOf("\"");
-                        int startPosition = temp.LastIndexOf("\"", finalPosition - 1) + 1;    //Dont grab the same position or starting quote
-                        temp = temp.Substring(startPosition, (finalPosition - startPosition)).Replace("\\\\", "\\");
-                        steam.AdditionalSteamDirectories.Add(temp);
+                        if (finalPosition != -1)
+                        {
+                            int startPosition = temp.LastIndexOf("\"", finalPosition - 1) + 1;    //Dont grab the same position or starting quote
+                            temp = temp.Substring(startPosition, (finalPosition - startPosition)).Replace("\\\\", "\\");
+                            if (Directory.Exists(temp))
+                                steam.AdditionalSteamDirectories.Add(temp);
+                        }
                     }
                     richTextBoxAdditionalSteamDirectory.Lines = steam.AdditionalSteamDirectories.ToArray();
                 }
