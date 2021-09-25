@@ -64,6 +64,14 @@ namespace SourceMultiToolCSharp
             });
             listOfSourceGames.Add(new SourceGame
             {
+                SteamName = "Alien Swarm Reactive Drop",
+                ProperName = "Alien Swarm: Reactive Drop",
+                SourceName = "reactivedrop",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
                 SteamName = "Contagion",
                 ProperName = "Contagion",
                 SourceName = "contagion",
@@ -120,9 +128,25 @@ namespace SourceMultiToolCSharp
             });
             listOfSourceGames.Add(new SourceGame
             {
+                SteamName = "FIREFIGHT RELOADED",
+                ProperName = "FIREFIGHT RELOADED",
+                SourceName = "firefightreloaded",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
                 SteamName = "Empires",
                 ProperName = "Empires",
                 SourceName = "empires",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
+                SteamName = "G String",
+                ProperName = "G String",
+                SourceName = "gstringv2",
                 Installed = false,
                 Directory = ""
             });
@@ -152,9 +176,33 @@ namespace SourceMultiToolCSharp
             });
             listOfSourceGames.Add(new SourceGame
             {
+                SteamName = "Half-Life 2",
+                ProperName = "Half-Life 2 Episode 1",
+                SourceName = "episodic",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
+                SteamName = "Half-Life 2",
+                ProperName = "Half-Life 2 Episode 2",
+                SourceName = "ep2",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
                 SteamName = "Half-Life 2 Deathmatch",
                 ProperName = "Half-Life 2 Deathmatch",
                 SourceName = "hl2mp",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
+                SteamName = "Half-Life 2 Update",
+                ProperName = "Half-Life 2 Update",
+                SourceName = "hl2",
                 Installed = false,
                 Directory = ""
             });
@@ -214,6 +262,31 @@ namespace SourceMultiToolCSharp
                 Installed = false,
                 Directory = ""
             });
+            
+            listOfSourceGames.Add(new SourceGame
+            {
+                SteamName = "Source SDK Base 2013 Multiplayer",
+                ProperName = "Source SDK Base 2013 Multiplayer",
+                SourceName = "hl2mp",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
+                SteamName = "Source SDK Base 2013 Singleplayer",
+                ProperName = "Source SDK Base 2013 Singleplayer",
+                SourceName = "hl2",
+                Installed = false,
+                Directory = ""
+            });
+            listOfSourceGames.Add(new SourceGame
+            {
+                SteamName = "SourceFilmmaker",
+                ProperName = "Source Filmmaker",
+                SourceName = "game",
+                Installed = false,
+                Directory = ""
+            });
             listOfSourceGames.Add(new SourceGame
             {
                 SteamName = "Team Fortress 2",
@@ -222,12 +295,17 @@ namespace SourceMultiToolCSharp
                 Installed = false,
                 Directory = ""
             });
+           
             // Load in saved properties if still valid
             if (File.Exists(Properties.Settings.Default.mainSteamDir + "/Steam.exe"))
             {
                 steam.MainSteamDir = Properties.Settings.Default.mainSteamDir;
                 textSteamDirectory.Text = Properties.Settings.Default.mainSteamDir;
                 FindSteamDirectories();
+            }
+            else
+            {
+                FindSteam();
             }
         }
 
@@ -351,6 +429,7 @@ namespace SourceMultiToolCSharp
                 switch (gameName)
                 {
                     case "Alien Swarm":
+                    case "Alien Swarm: Reactive Drop":
                     case "Counter-Strike Global Offensive":
                     case "Dino D-Day":
                     case "Left 4 Dead 2":
@@ -372,6 +451,27 @@ namespace SourceMultiToolCSharp
                             return;
                         }
                         break;
+                    case "Source Filmmaker":
+                        if (!File.Exists(directory + "\\game\\bin\\hammer.exe"))
+                        {
+                            MessageBox.Show(String.Format("No Hammer install could be found at {0}\\game\\bin\\hammer.exe", directory), "ERROR 002", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        break;
+                    case "G String":
+                        if (!File.Exists(directory + "\\bin\\hammer.exe"))
+                        {
+                            MessageBox.Show(String.Format("No Hammer install could be found at {0}\\game\\bin\\hammer.exe \n\n G String doesn't have it!", directory), "ERROR 002", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        break;
+                    case "Half-Life 2 Update":
+                        if (!File.Exists(directory + "\\bin\\hammer.exe"))
+                        {
+                            MessageBox.Show(String.Format("No Hammer install could be found at {0}\\game\\bin\\hammer.exe \n\n Half-Life 2 Update doesn't have it!", directory), "ERROR 002", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        break;
                     default:
                         MessageBox.Show(String.Format("No Hammer install could be found at {0}\\bin\\hammer.exe", directory), "ERROR 002", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -384,6 +484,8 @@ namespace SourceMultiToolCSharp
                 hammer.StartInfo.Arguments = "/c cd /d " + directory + "\\sdk\\bin && start \"\" hammer.exe -nop4";
             else if (gameName == "Pirates, Vikings, and Knights II")
                 hammer.StartInfo.Arguments = "/c cd /d " + directory + "\\sdkbase_pvkii\\bin && start \"\" hammer.exe -nop4";
+            else if (gameName == "Source Filmmaker")
+                hammer.StartInfo.Arguments = "/c cd /d " + directory + "\\game\\bin && start \"\" hammer.exe -nop4";
             else
                 hammer.StartInfo.Arguments = "/c cd /d " + directory + "\\bin && start \"\" hammer.exe -nop4";
             hammer.Start();
@@ -399,6 +501,7 @@ namespace SourceMultiToolCSharp
                 switch (gameName)
                 {
                     case "Alien Swarm":
+                    case "Alien Swarm: Reactive Drop":
                     case "Counter-Strike Global Offensive":
                     case "Dino D-Day":
                     case "Left 4 Dead 2":
@@ -409,19 +512,40 @@ namespace SourceMultiToolCSharp
                     case "No More Room In Hell":
                         if (!File.Exists(directory + "\\sdk\\bin\\hlmv.exe"))
                         {
-                            MessageBox.Show(String.Format("No Hammer install could be found at {0}\\sdk\\bin\\hlmv.exe", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show(String.Format("No Model Viewer install could be found at {0}\\sdk\\bin\\hlmv.exe", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                         break;
                     case "Pirates, Vikings, and Knights II":
                         if (!File.Exists(directory + "\\sdkbase_pvkii\\bin\\hlmv.exe"))
                         {
-                            MessageBox.Show(String.Format("No Hammer install could be found at {0}\\sdkbase_pvkii\\bin\\hlmv.exe", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show(String.Format("No Model Viewer install could be found at {0}\\sdkbase_pvkii\\bin\\hlmv.exe", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                         break;
+                    case "Source Filmmaker":
+                        if (!File.Exists(directory + "\\game\\bin\\hlmv.exe"))
+                        {
+                            MessageBox.Show(String.Format("No Model Viewer install could be found at {0}\\game\\bin\\hlmv.exe", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        break;
+                    case "G String":
+                        if (!File.Exists(directory + "\\bin\\hlmv.exe"))
+                        {
+                            MessageBox.Show(String.Format("No Model Viewer install could be found at {0}\\game\\bin\\hlmv.exe \n\n Thats ok though we will use 2013 MP or 2013 SP. ", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            
+                        }
+                        break;
+                    case "Half-Life 2 Update":
+                        if (!File.Exists(directory + "\\bin\\hlmv.exe"))
+                        {
+                            MessageBox.Show(String.Format("No Model Viewer install could be found at {0}\\game\\bin\\hlmv.exe \n\n Thats ok though we will use 2013 MP or 2013 SP. ", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        }
+                        break;
                     default:
-                        MessageBox.Show(String.Format("No Hammer install could be found at {0}\\bin\\hlmv.exe", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(String.Format("No Model Viewer install could be found at {0}\\bin\\hlmv.exe", directory), "ERROR 003", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                 }
             }
@@ -432,6 +556,42 @@ namespace SourceMultiToolCSharp
                 modelviewer.StartInfo.Arguments = "/c cd /d " + directory + "\\sdk\\bin && start \"\" hlmv.exe -game \"" + directory + "\\" + sourcename + "\"";
             else if (gameName == "Pirates, Vikings, and Knights II")
                 modelviewer.StartInfo.Arguments = "/c cd /d " + directory + "\\sdkbase_pvkii\\bin && start \"\" hlmv.exe -game \"" + directory + "\\" + sourcename + "\"";
+            else if (gameName == "Source Filmmaker")
+                modelviewer.StartInfo.Arguments = "/c cd /d " + directory + "\\game\\bin && start \"\" hlmv.exe -game \"" + directory + "\\" + sourcename + "\\usermod" + "\"";
+            else if (gameName == "G String")
+            {
+                if (comboBoxGames.Items.Contains("Source SDK Base 2013 Singleplayer"))
+                {
+                    string mpdirectory = listOfSourceGames.First(item => item.ProperName == "Source SDK Base 2013 Singleplayer").Directory;
+                    modelviewer.StartInfo.Arguments = "/c cd /d " + "\"" + mpdirectory + "\\bin" + "\"" + " && start \"\" hlmv.exe -game \"" + directory + "\\" + sourcename + "\"";
+                }
+                else if (comboBoxGames.Items.Contains("Source SDK Base 2013 Multiplayer"))
+                {
+                    string mpdirectory = listOfSourceGames.First(item => item.ProperName == "Source SDK Base 2013 Multiplayer").Directory;
+                    modelviewer.StartInfo.Arguments = "/c cd /d " + "\"" + mpdirectory + "\\bin" + "\"" + " && start \"\" hlmv.exe -game \"" + directory + "\\" + sourcename + "\"";
+                }
+                else 
+                {
+                    MessageBox.Show(String.Format("2013 MP or 2013 SP wasn't found please install one of these. ", directory), "ERROR 005", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else if (gameName == "Half-Life 2 Update")
+            {
+                if (comboBoxGames.Items.Contains("Source SDK Base 2013 Singleplayer"))
+                {
+                    string mpdirectory = listOfSourceGames.First(item => item.ProperName == "Source SDK Base 2013 Singleplayer").Directory;
+                    modelviewer.StartInfo.Arguments = "/c cd /d " + "\"" + mpdirectory + "\\bin" + "\"" + " && start \"\" hlmv.exe -game \"" + directory + "\\" + sourcename + "\"";
+                }
+                else if (comboBoxGames.Items.Contains("Source SDK Base 2013 Multiplayer"))
+                {
+                    string mpdirectory = listOfSourceGames.First(item => item.ProperName == "Source SDK Base 2013 Multiplayer").Directory;
+                    modelviewer.StartInfo.Arguments = "/c cd /d " + "\"" + mpdirectory + "\\bin" + "\"" + " && start \"\" hlmv.exe -game \"" + directory + "\\" + sourcename + "\"";
+                }
+                else
+                {
+                    MessageBox.Show(String.Format("2013 MP or 2013 SP wasn't found please install one of these. ", directory), "ERROR 005", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
             else
                 modelviewer.StartInfo.Arguments = "/c cd /d " + directory + "\\bin && start \"\" hlmv.exe -game \""+directory+"\\"+sourcename+"\"";
             modelviewer.Start();
