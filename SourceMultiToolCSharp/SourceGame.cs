@@ -12,6 +12,12 @@ namespace SourceMultiToolCSharp
         public string ProperName { get; set; }
         public string SourceName { get; set; }
         public bool Installed { get; set; }
+
+        public bool Mod { get; set; }
         public string Directory { get; set; }
+
+        public string Executable { get; set; }
+
+        public uint AppID { get; set; }
     }
 }

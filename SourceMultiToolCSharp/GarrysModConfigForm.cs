@@ -35,6 +35,14 @@ namespace SourceMultiToolCSharp
                             gmodAddons.Add(addonName, addon);
                         }
                     }
+                    else if (game.Mod)
+                    {
+
+                        string modName =  game.ProperName;
+
+                        listbox_gmodContent.Items.Add(modName);
+                       
+                    }
                     else
                     {
                         listbox_gmodContent.Items.Add(game.ProperName);
@@ -68,7 +76,15 @@ namespace SourceMultiToolCSharp
                     {
                         if(game.ProperName == content)
                         {
-                            writer.WriteLine("\""+game.SourceName+"\"    "+"\""+game.Directory+"\\"+game.SourceName+"\"");
+                            if (game.Mod)
+                            {
+                                writer.WriteLine("\"" + game.SourceName + "\"    " + "\"" + game.Directory + "\"");
+                            }
+                            else
+                            {
+                                writer.WriteLine("\"" + game.SourceName + "\"    " + "\"" + game.Directory + "\\" + game.SourceName + "\"");
+                            }
+                           
                         }
                     }
                     if (gmodAddons.ContainsKey(content))
